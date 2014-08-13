@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <title>Hello React</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <script src="http://fb.me/react-0.11.1.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.11.1.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <h1>ReactJS Hello World - Code Example</h1>
+      </div>
+      <div id="sayhello"></div>  
+    </div>
+    <script type="text/jsx">
+      /** @jsx React.DOM */
+      //
+      // This is the parent component comprising of two inner components
+      // One of the component is UserName which is used to allow user to enter their name
+      // Other component is HelloText which displays the text such as Hello, World
+      //
+      var SayHello = React.createClass({
+        // This is used to set the state, "data" which is 
+        // accessed later in HelloText component to display the updated state
+        // 
+        getInitialState: function() {
+          return {data: 'World'}
+        },
+        // It is recommended to capture events happening with any children
+        // at the parent level and set the new state that updates the children appropriately
+        handleNameSubmit: function(name) {
+          this.setState({data: name});
+        },
+        // Render method which is comprised of two components such as UserName and HelloText
+        //
+        render: function() {
+         return(
+           <div>
+            <UserName onNameSubmit={this.handleNameSubmit}/>
+            <HelloText data={this.state.data}/>
+           </div>
+           );
+        }
+      });
+      // UserName component which has following two methods:
+      // handleChange: Used to capture onChange event 
+      // render: Code to render the component
+      //
+      var UserName = React.createClass({
+        handleChange: function() {
+          var username = this.refs.username.getDOMNode().value.trim();
+          this.props.onNameSubmit({username: username });
+          this.refs.username.getDOMNode().value = '';
+          return false;
+        },
+        render: function() {
+         return(
+          <form role="form" onChange={this.handleChange}>
+             <div className="input-group input-group-lg">
+                <input type="text" className="form-control col-md-8"  placeholder="Type Your Name" ref="username"/>
+             </div>
+          </form>
+          );
+        }
+      });
+      // HelloText component to display Hello World or Hello Name text
+      // render: Consists of code display the HelloText component
+      //
+      var HelloText = React.createClass({
+          render: function() {
+            return (
+            <div>
+              <h3>Hello, {this.props.data}</h3>
+            </div>
+            );
+          }
+      });
+      
+      React.renderComponent(
+        <SayHello />,
+        document.getElementById( "sayhello" )
+        );
+    </script>
+  </body>
+</html>
