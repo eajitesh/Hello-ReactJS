@@ -1,0 +1,112 @@
+<html>
+  <head>
+    <title>Hello ReactJS - Adding A Table Row - Code Example</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <script src="http://fb.me/react-0.11.1.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.11.1.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <h1>Hello ReactJS - Add a Table Row - Code Example</h1>
+      </div>
+      <div id="companyApp"></div>  
+    </div>
+    <script type="text/jsx">
+      /** @jsx React.DOM */
+      var CompanyApp = React.createClass({
+        getInitialState: function() {
+          return {companylist:this.props.companies};
+        },
+        handleNewRowSubmit: function( newcompany ) {
+          this.setState( {companylist: this.state.companylist.concat([newcompany])} );
+          console.log( "3456" );
+        },
+        render: function() {
+          var tableStyle = {width: '100%'};
+          var leftTdStyle = {width: '50%',padding:'20px',verticalAlign: 'top'};
+          var rightTdStyle = {width: '50%',padding:'20px',verticalAlign: 'top'};
+          return ( 
+            <table style={tableStyle}>
+              <tr>
+                <td style={leftTdStyle}>
+                  <CompanyList clist={this.state.companylist}/>
+                </td>
+                <td style={rightTdStyle}>
+                  <NewRow onRowSubmit={this.handleNewRowSubmit}/>
+                </td>
+              </tr>
+          </table>
+          );
+        }
+      });
+      
+      var CompanyList = React.createClass({
+        
+        render: function() {
+          var companies = this.props.clist.map(function (company) {
+                        console.log( company );
+                        return (
+                            <tr>
+                              <td>{company.cname}</td>
+                              <td>{company.ecount}</td>
+                              <td>{company.hoffice}</td>
+                            </tr>
+                        );
+                      });
+          console.log( "rendering CompanyList all over again" );
+          return ( 
+            <div>
+              <h3>List of Companies</h3>
+              <table className="table table-striped">
+                <th>Company Name</th>
+                <th>Employees</th>
+                <th>Head Office</th>
+                {companies}
+              </table>
+            </div>
+            );
+        }
+      });
+      
+      var NewRow = React.createClass({
+        handleSubmit: function() {
+          var cname = this.refs.cname.getDOMNode().value;
+          var ecount = this.refs.ecount.getDOMNode().value;
+          var hoffice = this.refs.hoffice.getDOMNode().value;
+          var newrow = {cname: cname, ecount: ecount, hoffice: hoffice };
+          this.props.onRowSubmit( newrow );
+          
+          this.refs.cname.getDOMNode().value = '';
+          this.refs.ecount.getDOMNode().value = '';
+          this.refs.hoffice.getDOMNode().value = '';
+          return false;
+        },
+        render: function() {
+          var inputStyle = {padding:'12px'}
+          return ( 
+            <div className="well">
+              <h3>Add A Company</h3>
+            <form onSubmit={this.handleSubmit}>
+              <div className="input-group input-group-lg" style={inputStyle}>
+                <input type="text"  className="form-control col-md-8"  placeholder="Company Name" ref="cname"/>
+              </div>
+              <div className="input-group input-group-lg" style={inputStyle}>
+                <input type="text"  className="form-control col-md-8" placeholder="Employee Count" ref="ecount"/>
+              </div>
+              <div className="input-group input-group-lg" style={inputStyle}>
+                <input type="text"  className="form-control col-md-8" placeholder="Headoffice" ref="hoffice"/>
+              </div>
+              <div className="input-group input-group-lg" style={inputStyle}>
+                <input type="submit"  className="btn btn-primary" value="Add Company"/>
+              </div>
+            </form>
+            </div>
+            );
+        }
+      });
+      var defCompanies = [{cname:"Infosys Technologies",ecount:150000,hoffice:"Bangalore"},{cname:"TCS",ecount:140000,hoffice:"Mumbai"}];
+      React.renderComponent( <CompanyApp companies={defCompanies}/>, document.getElementById( "companyApp" ) );
+    </script>
+  </body>
