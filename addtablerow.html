@@ -41,18 +41,28 @@
           );
         }
       });
+      var Company = React.createClass({
+        handleRemoveCompany: function() {
+          console.log( "removing..." );
+        },
+        render: function() {
+          return (
+            <tr>
+              <td>{this.props.company.cname}</td>
+              <td>{this.props.company.ecount}</td>
+              <td>{this.props.company.hoffice}</td>
+              <td><input type="button"  className="btn btn-primary" value="Remove" onClick={this.handleRemoveCompany}/></td>
+            </tr>
+            );
+        }
+      });
       
       var CompanyList = React.createClass({
-        
         render: function() {
           var companies = this.props.clist.map(function (company) {
                         console.log( company );
                         return (
-                            <tr>
-                              <td>{company.cname}</td>
-                              <td>{company.ecount}</td>
-                              <td>{company.hoffice}</td>
-                            </tr>
+                            <Company company={company}/>
                         );
                       });
           console.log( "rendering CompanyList all over again" );
@@ -63,13 +73,13 @@
                 <th>Company Name</th>
                 <th>Employees</th>
                 <th>Head Office</th>
+                <th>Action</th>
                 {companies}
               </table>
             </div>
             );
         }
-      });
-      
+      });      
       var NewRow = React.createClass({
         handleSubmit: function() {
           var cname = this.refs.cname.getDOMNode().value;
